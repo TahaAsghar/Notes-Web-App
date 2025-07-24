@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Delete Note{% endblock %}
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <h1 class="title">🗑️ Delete Note</h1>
+    <p class="mb-3">Are you sure you want to delete <strong>{{ object.title }}</strong>?</p>
+    <form method="post">{% csrf_token %}
+        <div class="buttons">
+            <button class="button is-danger">Yes, Delete</button>
+            <a href="{% url 'note_list' %}" class="button">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

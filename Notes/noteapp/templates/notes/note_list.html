@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}My Notes{% endblock %}
+{% block content %}
+<h1 class="title">📝 My Notes</h1>
+<div class="is-flex is-justify-content-space-between is-align-items-center">
+    <input type="text" class="input" style="max-width: 300px" placeholder="Search notes..." onkeyup="filterNotes(this.value)">
+    <div>
+        <a href="{% url 'note_create' %}" class="button is-primary is-small">➕ Create Note</a>
+    </div>
+</div>
+
+<table class="table is-striped is-hoverable is-fullwidth mt-4" id="notesTable">
+    <thead>
+        <tr><th>Title</th><th>Created</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        {% for note in notes %}
+        <tr>
+            <td>{{ note.title }}</td>
+            <td>{{ note.created_at|date:"Y-m-d H:i" }}</td>
+            <td>
+                <a href="{% url 'note_detail' note.pk %}" class="button is-link is-light is-small">View</a>
+                <a href="{% url 'note_edit' note.pk %}" class="button is-info is-light is-small">Edit</a>
+                <a href="{% url 'note_delete' note.pk %}" class="button is-danger is-light is-small">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<nav class="pagination is-centered mt-4" role="navigation" aria-label="pagination">
+    {% if page_obj.has_previous %}
+        <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% else %}
+        <a class="pagination-previous" disabled>Previous</a>
+    {% endif %}
+
+    {% if page_obj.has_next %}
+        <a class="pagination-next" href="?page={{ page_obj.next_page_number }}">Next</a>
+    {% else %}
+        <a class="pagination-next" disabled>Next</a>
+    {% endif %}
+
+    <ul class="pagination-list">
+        {% for page_num in paginator.page_range %}
+            <li>
+                <a href="?page={{ page_num }}" class="pagination-link {% if page_num == page_obj.number %}is-current{% endif %}">{{ page_num }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
